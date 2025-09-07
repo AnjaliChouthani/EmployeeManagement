@@ -17,7 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class UploadeServiceImple implements UploadServiceInterface{
@@ -31,7 +34,6 @@ public class UploadeServiceImple implements UploadServiceInterface{
     private EmployeeRepository employeeRepository;
 
     @Autowired
-
     private FileUploaderRepository fileUploaderRepository;
 
     @Override
@@ -46,9 +48,9 @@ public class UploadeServiceImple implements UploadServiceInterface{
         }
 
         //folder exist or not
-        File file1=new File(uploadFolder);
-        if(!file1.exists()){
-            file1.mkdirs();
+        File f=new File(uploadFolder);
+        if(!f.exists()){
+            f.mkdirs();
         }
         //save to storage
         String currPath=System.getProperty("user.dir");
@@ -66,6 +68,7 @@ public class UploadeServiceImple implements UploadServiceInterface{
         uploader.setEmployee(employee);
         uploader.setPath(filePath);
         uploader.setFileName(file.getOriginalFilename());
+        uploader.setStoredFileName(System.currentTimeMillis()+"-"+employee.getId()+"-"+employee.getName()+"-"+file.getOriginalFilename());
 
         if (file.getContentType() != null) {
             uploader.setFileType(file.getContentType());
@@ -76,4 +79,56 @@ public class UploadeServiceImple implements UploadServiceInterface{
         fileUploaderRepository.save(uploader);
         return new ResponseEntity<>("saved",HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> uploadMultipleFile(List<MultipartFile> file, Long id) {
+
+        //check employee exist or not
+       Employee employee=   employeeRepository.findById(id).orElseThrow(()->{return new AppException(ErrorMsg.errorMessage,HttpStatus.NOT_FOUND);});
+
+       //file is empty or not
+        for(MultipartFile file1:file){
+             if(file1.isEmpty()){
+                 throw new AppException("file is empty",HttpStatus.BAD_REQUEST);
+             }
+            //use logger
+        }
+            //check folder exist or not
+
+          File f=new File(uploadFolder);
+          if(!f.exists()){
+               f.mkdirs();
+          }
+          //store k liye path
+
+
+        String curr=System.getProperty("user.dir")+File.separator+uploadFolder;
+
+             List<FileUploader>fileList= file.stream().map((list)-> {
+                  try {
+                      String path=curr+File.separator+list.getOriginalFilename();
+                      //transfer the list file to specific path
+                      list.transferTo(new File(path));
+                      FileUploader fileUploader=new FileUploader();
+                      fileUploader.setFileName(list.getOriginalFilename());
+                      fileUploader.setEmployee(employee);
+                      fileUploader.setPath(path);
+                      fileUploader.setStoredFileName(System.currentTimeMillis()+"-"+employee.getId()+"-"+employee.getName()+list.getOriginalFilename());
+                      if(list.getContentType()!=null){
+                          fileUploader.setFileType(list.getContentType());
+                      }
+                      else{
+                          fileUploader.setFileType("unknown");
+                      }
+                      return fileUploader;
+                  } catch (IOException e) {
+                      throw new AppException("failed to save file",HttpStatus.BAD_REQUEST);
+                  }
+
+             }).toList();
+             fileUploaderRepository.saveAll(fileList);
+       //storing the data into db
+        return new ResponseEntity<>("saved all file ", HttpStatus.OK);
+    }
 }
+

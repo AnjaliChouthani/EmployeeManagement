@@ -13,4 +13,6 @@ public interface EmployeeInterface {
     public ResponseEntity<ResponseApi> getEmployeeById(Long id);
     public ResponseEntity<ResponseApi> deleteEmployeById(Long id);
     public ResponseEntity<ResponseApi> updateEmploye(Long id, Updatedto updatedto);
+
+
 }

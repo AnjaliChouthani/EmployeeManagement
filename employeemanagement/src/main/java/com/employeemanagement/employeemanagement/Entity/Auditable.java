@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable<U> implements Serializable {
-
      @CreatedDate
      @Column(updatable = false)
     private LocalDateTime createdTime;

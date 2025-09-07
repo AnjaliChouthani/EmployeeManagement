@@ -17,11 +17,15 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmployeeService implements EmployeeInterface {
     @Autowired
     private EmployeeRepository employeeRepository;
+
+      @Autowired
+    EmailSender emailSender;
   @Override
     public ResponseEntity<ResponseApi> createEmployee(EmployeeDto employeeDto) {
 
@@ -43,8 +47,31 @@ public class EmployeeService implements EmployeeInterface {
 
         employee.setAddress(address);
 
-        Employee savedEmployee = employeeRepository.save(employee);
 
+
+
+       //username and password generate ho
+
+
+      String username=employeeDto.getName().toLowerCase().replace(" ","")+"_"+(int)(Math.random()*1000);
+      String password= UUID.randomUUID().toString().substring(0,8);
+      employee.setUsername(username);
+      employee.setPassword(password);
+      Employee savedEmployee = employeeRepository.save(employee);
+        String emailId=savedEmployee.getEmail();
+
+
+        if(savedEmployee.getUsername()!=null && savedEmployee.getPassword()!=null){
+              //mail msg
+            String body="login details : "+"\n"+"username :- "+ savedEmployee.getUsername()+"\n"+"password :- "+savedEmployee.getPassword();
+             String subject="login details ";
+             String to=savedEmployee.getEmail();
+             emailSender.sendEmail(to,subject,body);
+
+        }
+        else{
+            throw new AppException("Internal Server Error No Username and Password Generated ",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         //entity to dto
 
         EmployeeDto dtodetails = new EmployeeDto();
@@ -63,7 +90,6 @@ public class EmployeeService implements EmployeeInterface {
         HashMap<String, Object> meta = new HashMap<>();
         meta.put("Employee", dtodetails);
         responseApi.setMeta(meta);
-
         return new ResponseEntity<>(responseApi, HttpStatus.CREATED);
     }
 
@@ -188,8 +214,6 @@ public class EmployeeService implements EmployeeInterface {
         Employee employee=employeeOptional.get();
        employee.setName(updatedto.getEmployeeDto().getName());
        employee.setEmail(updatedto.getEmployeeDto().getEmail());
-
-
        Address address=employee.getAddress();
 
 

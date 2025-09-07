@@ -4,5 +4,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface FileDownloadInterface {
 
-    public ResponseEntity<?> downloadFile(String filename);
+    public ResponseEntity<?> downloadFile(Long id);
 }

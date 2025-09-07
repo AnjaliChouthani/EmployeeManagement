@@ -31,11 +31,7 @@ public class Employee extends Auditable implements Serializable {
     @JoinColumn(name="address_id")
     private Address address;
 
-//    //new one
-//
-//    @JoinColumn(name="department_id")
-//    @ManyToOne
-//    private Department department;
-
+    String username;
+    String password;
 
 }

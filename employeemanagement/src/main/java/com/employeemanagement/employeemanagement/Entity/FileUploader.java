@@ -19,6 +19,7 @@ public class FileUploader extends Auditable implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fileName;
+    private String storedFileName;
     private String fileType;
     private String path;
 
