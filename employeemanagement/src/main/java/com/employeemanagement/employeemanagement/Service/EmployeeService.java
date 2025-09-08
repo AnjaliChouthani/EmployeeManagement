@@ -46,34 +46,24 @@ public class EmployeeService implements EmployeeInterface {
         address.setStreet(employeeDto.getAddressDto().getStreet());
 
         employee.setAddress(address);
-
-
-
-
        //username and password generate ho
-
-
       String username=employeeDto.getName().toLowerCase().replace(" ","")+"_"+(int)(Math.random()*1000);
       String password= UUID.randomUUID().toString().substring(0,8);
       employee.setUsername(username);
       employee.setPassword(password);
       Employee savedEmployee = employeeRepository.save(employee);
         String emailId=savedEmployee.getEmail();
-
-
         if(savedEmployee.getUsername()!=null && savedEmployee.getPassword()!=null){
               //mail msg
-            String body="login details : "+"\n"+"username :- "+ savedEmployee.getUsername()+"\n"+"password :- "+savedEmployee.getPassword();
+            String body="  Employee Registered, for further login use this username and password"+"\n"+"username :- "+ savedEmployee.getUsername()+"\n"+"password :- "+savedEmployee.getPassword();
              String subject="login details ";
              String to=savedEmployee.getEmail();
              emailSender.sendEmail(to,subject,body);
-
         }
         else{
             throw new AppException("Internal Server Error No Username and Password Generated ",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         //entity to dto
-
         EmployeeDto dtodetails = new EmployeeDto();
         dtodetails.setName(savedEmployee.getName());
         dtodetails.setEmail(savedEmployee.getEmail());
@@ -127,8 +117,6 @@ public class EmployeeService implements EmployeeInterface {
         responseApi.setError(false);
         return new ResponseEntity<>(responseApi, HttpStatus.OK);
     }
-
-
 @Override
     public ResponseEntity<ResponseApi> getEmployeeById(Long id) {
           ResponseApi responseApi=new ResponseApi();
@@ -209,26 +197,18 @@ public class EmployeeService implements EmployeeInterface {
        if(!employeeOptional.isPresent()){
            throw new AppException(ErrorMsg.errorMessage,HttpStatus.NOT_FOUND,id);
        }
-
         // dto to entity
         Employee employee=employeeOptional.get();
        employee.setName(updatedto.getEmployeeDto().getName());
        employee.setEmail(updatedto.getEmployeeDto().getEmail());
        Address address=employee.getAddress();
-
-
            address.setCity(updatedto.getEmployeeDto().getAddressDto().getCity());
            address.setStreet(updatedto.getEmployeeDto().getAddressDto().getStreet());
            address.setState(updatedto.getEmployeeDto().getAddressDto().getState());
            address.setPincode(updatedto.getEmployeeDto().getAddressDto().getPincode());
            employee.setAddress(address);
-
-
        //entity update
     employeeRepository.save(employee);
-
-
-
     responseApi.setMeta(new HashMap<>());
     responseApi.setMessage("updated !");
     responseApi.setError(false);

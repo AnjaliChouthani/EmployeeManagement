@@ -30,8 +30,6 @@ public class Employee extends Auditable implements Serializable {
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name="address_id")
     private Address address;
-
     String username;
     String password;
-
 }
