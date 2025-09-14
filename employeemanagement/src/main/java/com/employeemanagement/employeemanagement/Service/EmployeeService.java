@@ -1,6 +1,7 @@
 package com.employeemanagement.employeemanagement.Service;
 
 
+
 import com.employeemanagement.employeemanagement.ConstantMessage.ErrorMsg;
 import com.employeemanagement.employeemanagement.Entity.Address;
 import com.employeemanagement.employeemanagement.Entity.Employee;
@@ -19,6 +20,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class EmployeeService implements EmployeeInterface {
     @Autowired
@@ -26,6 +30,9 @@ public class EmployeeService implements EmployeeInterface {
 
       @Autowired
     EmailSender emailSender;
+
+
+      private static final Logger logger=LoggerFactory.getLogger(EmployeeService.class);
   @Override
     public ResponseEntity<ResponseApi> createEmployee(EmployeeDto employeeDto) {
 
@@ -160,9 +167,7 @@ public class EmployeeService implements EmployeeInterface {
        if(!employeeOptional.isPresent()){
            throw new AppException(ErrorMsg.errorMessage,HttpStatus.NOT_FOUND,id);
        }
-
        //entity to dto
-
         EmployeeWithId employeedto=new EmployeeWithId();
        employeedto.setId(employeeOptional.get().getId());
        employeedto.setName(employeeOptional.get().getName());
@@ -174,7 +179,6 @@ public class EmployeeService implements EmployeeInterface {
         addressdto.setPincode(employeeOptional.get().getAddress().getPincode());
         addressdto.setState(employeeOptional.get().getAddress().getState());
         addressdto.setId(employeeOptional.get().getAddress().getId());
-
         employeedto.setAddressWithId(addressdto);
 
         //delete from db
@@ -195,6 +199,7 @@ public class EmployeeService implements EmployeeInterface {
        Optional<Employee>employeeOptional= employeeRepository.findById(id);
        ResponseApi responseApi=new ResponseApi();
        if(!employeeOptional.isPresent()){
+           logger.warn("not found ");
            throw new AppException(ErrorMsg.errorMessage,HttpStatus.NOT_FOUND,id);
        }
         // dto to entity
@@ -212,9 +217,7 @@ public class EmployeeService implements EmployeeInterface {
     responseApi.setMeta(new HashMap<>());
     responseApi.setMessage("updated !");
     responseApi.setError(false);
-
     return new ResponseEntity<>(responseApi,HttpStatus.OK);
-
     }
 }
 
