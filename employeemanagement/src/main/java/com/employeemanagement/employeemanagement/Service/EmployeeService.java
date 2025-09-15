@@ -45,6 +45,7 @@ public class EmployeeService implements EmployeeInterface {
         Employee employee = new Employee();
         employee.setEmail(employeeDto.getEmail());
         employee.setName(employeeDto.getName());
+        employee.setRole(employeeDto.getRole());
         //address store into
         Address address=new Address();
         address.setCity(employeeDto.getAddressDto().getCity());
@@ -74,6 +75,7 @@ public class EmployeeService implements EmployeeInterface {
         EmployeeDto dtodetails = new EmployeeDto();
         dtodetails.setName(savedEmployee.getName());
         dtodetails.setEmail(savedEmployee.getEmail());
+        dtodetails.setRole(savedEmployee.getRole());
         AddressDto addressDto=new AddressDto();
         addressDto.setStreet(savedEmployee.getAddress().getStreet());
         addressDto.setCity(savedEmployee.getAddress().getCity());
@@ -105,6 +107,7 @@ public class EmployeeService implements EmployeeInterface {
             EmployeeWithId tempdto = new EmployeeWithId();
             tempdto.setEmail(employee.getEmail());
             tempdto.setName(employee.getName());
+            tempdto.setRole(employee.getRole());
             tempdto.setId(employee.getId());
             AddressWithId addressdto=new AddressWithId();
             addressdto.setCity(employee.getAddress().getCity());
@@ -136,6 +139,7 @@ public class EmployeeService implements EmployeeInterface {
          employeedto.setId(optionalEmployee.get().getId());
          employeedto.setName(optionalEmployee.get().getName());
          employeedto.setEmail(optionalEmployee.get().getEmail());
+         employeedto.setRole(optionalEmployee.get().getRole());
          //Address
 
         AddressWithId addressDto=new AddressWithId();
@@ -172,6 +176,7 @@ public class EmployeeService implements EmployeeInterface {
        employeedto.setId(employeeOptional.get().getId());
        employeedto.setName(employeeOptional.get().getName());
        employeedto.setEmail(employeeOptional.get().getEmail());
+       employeedto.setRole(employeeOptional.get().getRole());
         //address
         AddressWithId addressdto=new AddressWithId();
         addressdto.setCity(employeeOptional.get().getAddress().getCity());
@@ -206,6 +211,7 @@ public class EmployeeService implements EmployeeInterface {
         Employee employee=employeeOptional.get();
        employee.setName(updatedto.getEmployeeDto().getName());
        employee.setEmail(updatedto.getEmployeeDto().getEmail());
+       employee.setRole(updatedto.getEmployeeDto().getRole());
        Address address=employee.getAddress();
            address.setCity(updatedto.getEmployeeDto().getAddressDto().getCity());
            address.setStreet(updatedto.getEmployeeDto().getAddressDto().getStreet());

@@ -20,7 +20,6 @@ public class EmailSender {
        message.setText(body);
       javaMailSender.send(message);
    }
-
     public void sendOtp(String to,String subject,String body){
         SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
         simpleMailMessage.setTo(to);
@@ -28,5 +27,4 @@ public class EmailSender {
         simpleMailMessage.setText(body);
         javaMailSender.send(simpleMailMessage);
     }
-
 }

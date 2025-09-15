@@ -20,5 +20,7 @@ public class EmployeeWithId {
 
     private String email;
     private AddressWithId addressWithId;
-//    private DepartmentDto departmentDto;
+
+    private String role;
+
 }

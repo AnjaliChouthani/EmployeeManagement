@@ -9,11 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 
 public class EmployeemanagementApplication {
-
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeemanagementApplication.class, args);
 	}
-
 }

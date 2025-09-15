@@ -12,3 +12,4 @@ public class ThirdPartyConf {
         return new RestTemplate();
     }
 }
+

@@ -45,8 +45,6 @@ public class JwtUtilClass {
                .parseClaimsJws(token).getBody().getExpiration();
        return (username.equals(userDetails.getUsername()) && expirationDate.after(new Date()));
    }
-
-
    public String extractUsernameByToken(String token){
        Key key=Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes());
        return  Jwts.parserBuilder().setSigningKey(key).build()
