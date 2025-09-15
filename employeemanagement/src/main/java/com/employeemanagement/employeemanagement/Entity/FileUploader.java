@@ -23,7 +23,7 @@ public class FileUploader extends Auditable implements Serializable {
     private String fileType;
     private String path;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="employee_id")
      private Employee employee;
 
