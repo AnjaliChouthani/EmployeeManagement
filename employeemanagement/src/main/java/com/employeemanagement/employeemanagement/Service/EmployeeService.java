@@ -6,11 +6,13 @@ import com.employeemanagement.employeemanagement.ConstantMessage.ErrorMsg;
 import com.employeemanagement.employeemanagement.Entity.Address;
 import com.employeemanagement.employeemanagement.Entity.Employee;
 //import com.employeemanagement.employeemanagement.Exception.EmailNotFoundException;
+import com.employeemanagement.employeemanagement.Event.EmployeeCreatedEvent;
 import com.employeemanagement.employeemanagement.dto.Updatedto;
 import com.employeemanagement.employeemanagement.Exception.AppException;
 import com.employeemanagement.employeemanagement.Repository.EmployeeRepository;
 import com.employeemanagement.employeemanagement.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class EmployeeService implements EmployeeInterface {
 
       @Autowired
     EmailSender emailSender;
+
+      @Autowired
+      private ApplicationEventPublisher publisher;
 
 
       private static final Logger logger=LoggerFactory.getLogger(EmployeeService.class);
@@ -60,17 +65,21 @@ public class EmployeeService implements EmployeeInterface {
       employee.setUsername(username);
       employee.setPassword(password);
       Employee savedEmployee = employeeRepository.save(employee);
-        String emailId=savedEmployee.getEmail();
-        if(savedEmployee.getUsername()!=null && savedEmployee.getPassword()!=null){
-              //mail msg
-            String body="  Employee Registered, for further login use this username and password"+"\n"+"username :- "+ savedEmployee.getUsername()+"\n"+"password :- "+savedEmployee.getPassword();
-             String subject="login details ";
-             String to=savedEmployee.getEmail();
-             emailSender.sendEmail(to,subject,body);
-        }
-        else{
-            throw new AppException("Internal Server Error No Username and Password Generated ",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+      if(savedEmployee!=null && savedEmployee.getRole().equalsIgnoreCase("intern")){
+          publisher.publishEvent(new EmployeeCreatedEvent(savedEmployee));
+      }
+
+//        String emailId=savedEmployee.getEmail();
+//        if(savedEmployee.getUsername()!=null && savedEmployee.getPassword()!=null){
+//              //mail msg
+//            String body="  Employee Registered, for further login use this username and password"+"\n"+"username :- "+ savedEmployee.getUsername()+"\n"+"password :- "+savedEmployee.getPassword();
+//             String subject="login details ";
+//             String to=savedEmployee.getEmail();
+//             emailSender.sendEmail(to,subject,body);
+//        }
+//        else{
+//            throw new AppException("Internal Server Error No Username and Password Generated ",HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
         //entity to dto
         EmployeeDto dtodetails = new EmployeeDto();
         dtodetails.setName(savedEmployee.getName());
@@ -226,4 +235,3 @@ public class EmployeeService implements EmployeeInterface {
     return new ResponseEntity<>(responseApi,HttpStatus.OK);
     }
 }
-

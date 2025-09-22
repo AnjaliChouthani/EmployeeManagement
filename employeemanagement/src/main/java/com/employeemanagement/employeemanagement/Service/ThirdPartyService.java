@@ -35,8 +35,6 @@ public class ThirdPartyService {
     private RestTemplate restTemplate;
 
     public ResponseEntity<String> callThirdApi(MobileDto mobileDto) {
-
-
         GeneratedOtp generatedOtp=new GeneratedOtp();
         generatedOtp.setApiKey(apiKey);
         generatedOtp.setSecretKey(secretKey);

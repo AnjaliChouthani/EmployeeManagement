@@ -46,7 +46,6 @@ public class OtpService {
          redisTemplate.opsForValue().set(email,otp,time, TimeUnit.MINUTES);
       emailOtpSender.sendOtp(to,subject,body);
     }
-
     public ResponseEntity<String> otpChecker(String email, String otp) {
                   String tempOtp=redisTemplate.opsForValue().get(email);
                   if(tempOtp==null){

@@ -22,11 +22,16 @@ public class JwtUtilClass {
    private long expiration;
 
    public String generateToken(UserDetails userDetails){
+
+
+       String role=userDetails.getAuthorities().iterator().next().getAuthority();
+
          String token= Jwts.builder()
                  .setSubject(userDetails.getUsername())
                  .setIssuedAt(new Date(System.currentTimeMillis()))
                  .setExpiration(new Date(System.currentTimeMillis()+expiration))
                  .signWith(Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes()))
+                 .claim("role",role)
                  .compact();
          logger.info("generate token {}",token);
          return token;
@@ -51,4 +56,11 @@ public class JwtUtilClass {
                .parseClaimsJws(token)
                .getBody().getSubject();
    }
+   public String extractRole(String token){
+       Key key=Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes());
+       return Jwts.parserBuilder().setSigningKey(key).build()
+               .parseClaimsJws(token).getBody().get("role",String.class);
+   }
+
+
 }

@@ -14,11 +14,17 @@ public class EmailSender {
    private JavaMailSender  javaMailSender;
 
    public void sendEmail(String to,String subject,String body){
-       SimpleMailMessage message=new SimpleMailMessage();
-       message.setTo(to);
-       message.setSubject(subject);
-       message.setText(body);
-      javaMailSender.send(message);
+       try {
+           SimpleMailMessage message = new SimpleMailMessage();
+           message.setTo(to);
+           message.setSubject(subject);
+           message.setText(body);
+           javaMailSender.send(message);
+       }
+       catch (Exception e){
+           e.printStackTrace();
+
+       }
    }
     public void sendOtp(String to,String subject,String body){
         SimpleMailMessage simpleMailMessage=new SimpleMailMessage();

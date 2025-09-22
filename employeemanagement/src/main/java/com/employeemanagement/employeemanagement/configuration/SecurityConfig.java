@@ -1,6 +1,4 @@
 package com.employeemanagement.employeemanagement.configuration;
-
-
 import com.employeemanagement.employeemanagement.helper.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 @Configuration
 //@EnableMethodSecurity
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfig {
-
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
 @Bean
